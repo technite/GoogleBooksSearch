@@ -22,6 +22,8 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -114,6 +116,8 @@ public class ParseJSON extends AsyncTask<Void, Integer, String> {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         } finally {
             if(urlConnection != null){
                 urlConnection.disconnect();
@@ -158,11 +162,15 @@ public class ParseJSON extends AsyncTask<Void, Integer, String> {
 
     }
 
-    public ArrayList<Book> parserMethod(String jsonString) throws JSONException {
+    public ArrayList<Book> parserMethod(String jsonString) throws JSONException, MalformedURLException, URISyntaxException {
         JSONObject root = new JSONObject(jsonString);
         ArrayList<Book> bookTitles = new ArrayList<Book>();
 
         int numBooks = root.optInt("totalItems");
+        String author = "";
+        URL url = null;
+        URL uri = null;
+
 
         JSONArray itemArray = root.getJSONArray("items");
 
@@ -175,11 +183,20 @@ public class ParseJSON extends AsyncTask<Void, Integer, String> {
 
             if(volumeInfo.has("authors")) {
                 JSONArray authors = volumeInfo.optJSONArray("authors");
-                String author = authors.get(0).toString();
-
-                Book book = new Book(title,author);
-                bookTitles.add(book);
+                author = authors.get(0).toString();
             }
+
+            if(volumeInfo.has("imageLinks")) {
+                JSONObject imageLinks = volumeInfo.optJSONObject("imageLinks");
+                String imgThumbUrl = imageLinks.optString("smallThumbnail");
+
+                //url = new URL(imgThumbUrl);
+                //uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef());
+                //url = uri.toURL();
+            }
+
+            Book book = new Book(title,author);
+            bookTitles.add(book);
         }
         return bookTitles;
     }

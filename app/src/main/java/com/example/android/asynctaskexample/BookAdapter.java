@@ -43,6 +43,15 @@ public class BookAdapter extends ArrayAdapter<Book> {
         TextView bookAuthor = (TextView) listItemView.findViewById(R.id.book_author);
         bookAuthor.setText(currentBook.getmAuthor());
 
+        ImageView imageview = (ImageView) listItemView.findViewById(R.id.book_thumbnail);
+
+        if(currentBook.hasImage()) {
+            imageview.setVisibility(View.VISIBLE);
+        }
+        else {
+            imageview.setVisibility(View.GONE);
+        }
+
         return listItemView;
     }
 }

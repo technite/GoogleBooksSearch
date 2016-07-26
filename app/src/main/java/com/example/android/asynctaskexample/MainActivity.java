@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                MyTask myTask = new MyTask(MainActivity.this, textview, button);
                 String searchTerm = editText.getText().toString().trim().replaceAll(" ","%20");
                 ParseJSON myTask = new ParseJSON(MainActivity.this, textview, button, listview, searchTerm);
                 myTask.execute();
@@ -37,5 +36,4 @@ public class MainActivity extends AppCompatActivity {
             }
         });
     }
-
 }
